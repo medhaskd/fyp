@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/screens/auth/splash.dart';
 import 'package:provider/provider.dart';
 
 import '../../globals/navigation/navigator_services.dart';
@@ -64,7 +66,14 @@ class HomePage extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Image.asset('assets/Bell.png'),
+                      child: IconButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (ctx) => SplashScreen()));
+                          },
+                          icon: Icon(Icons.logout_rounded)),
                     ),
                   ],
                 ),
