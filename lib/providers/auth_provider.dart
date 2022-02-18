@@ -1,9 +1,10 @@
-import 'package:checkmate/globals/navigation/navigator_services.dart';
-import 'package:checkmate/screens/auth/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:fyp/globals/navigation/navigator_services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../screens/auth/splash.dart';
 
 class AuthProvider extends ChangeNotifier {
   User _firebaseUser;

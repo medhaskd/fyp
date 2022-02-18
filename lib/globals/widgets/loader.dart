@@ -6,12 +6,20 @@ class AppLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      width: 150,
-      child: LoadingIndicator(
-        indicatorType: Indicator.ballClipRotateMultiple,
-        colors: [Theme.of(context).colorScheme.primaryVariant],
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Image.asset('assets/Logo.png'),
+          const SizedBox(
+            height: 150,
+            width: 150,
+            child: LoadingIndicator(
+              indicatorType: Indicator.ballClipRotateMultiple,
+              colors: [Colors.purple],
+            ),
+          ),
+        ],
       ),
     );
   }
