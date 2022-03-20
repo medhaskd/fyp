@@ -64,7 +64,7 @@ class AuthProvider extends ChangeNotifier {
     await _auth.signOut();
     _navigatorService.clearNavigate(
       ctx,
-      SplashScreen(),
+      const SplashScreen(),
     );
   }
 }

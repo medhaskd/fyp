@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/screens/auth/login.dart';
 import 'package:fyp/screens/auth/splash.dart';
-import 'package:fyp/screens/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'FYP',
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
