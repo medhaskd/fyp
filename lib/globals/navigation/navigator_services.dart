@@ -5,8 +5,8 @@ class NavigatorService {
     return Navigator.of(ctx).push(FadeRoute(page: page));
   }
 
-  Future<Object> pop(BuildContext ctx, Widget page) {
-    return Navigator.of(ctx).push(FadeRoute(page: page));
+  void pop(BuildContext ctx) {
+    return Navigator.of(ctx).pop();
   }
 
   Future<Object> replaceNavigate(BuildContext ctx, Widget page) {

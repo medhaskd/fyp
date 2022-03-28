@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/screens/auth/splash.dart';
-import 'package:fyp/screens/home/home.dart';
 import 'package:fyp/screens/home/widgets.dart';
 
 class HomeBase extends StatelessWidget {
@@ -115,19 +114,29 @@ class HomeBase extends StatelessWidget {
             const SizedBox(
               height: 18,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                    categories.length,
-                    (index) =>  RecomListItem(
-                          title: categories[index]['name'],
-                          subtitle: categories[index]['subtitle'],
-                          image: categories[index]['image'],
-                          type: categories[index]['type'],
-                        )),
-              ),
-            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('Services')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  List<Map<String, dynamic>> categories = [];
+                  for (var element in snapshot.data.docs) {
+                    categories.add(element.data());
+                  }
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(
+                          categories.length,
+                          (index) => CategoryPageListItem(
+                                obj: categories[index],
+                              )),
+                    ),
+                  );
+                }),
             const SizedBox(
               height: 28,
             ),
