@@ -83,7 +83,7 @@ class AllChats extends StatelessWidget {
                   List<Map<String, dynamic>> categories = [];
                   for (var element in snapshot.data.docs) {
                     categories
-                        .add({...element.data(), 'worker_id': element.id});
+                        .add(element.data());
                   }
                   return Expanded(
                     child: ValueListenableBuilder<String>(

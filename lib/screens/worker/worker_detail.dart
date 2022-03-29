@@ -54,7 +54,8 @@ class WorkerDetail extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  image: NetworkImage(obj['image'])),
+                                  image: NetworkImage(obj['image']),
+                                  fit: BoxFit.cover),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Color(0x14000000),
@@ -177,13 +178,6 @@ class WorkerDetail extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           showModalBottomSheet(
-                              // constraints: BoxConstraints(
-                              //     minHeight: SizeConfig.screenHeight / 2,
-                              //     maxHeight: SizeConfig.screenHeight / 1.3),
-
-                              // .loose(Size(
-                              //     SizeConfig.screenWidth,
-                              //     SizeConfig.screenHeight / 1.5)),
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(16),

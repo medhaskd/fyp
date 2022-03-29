@@ -9,6 +9,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fyp/globals/designs/size_config.dart';
 import 'package:fyp/globals/navigation/navigator_services.dart';
 import 'package:fyp/screens/chat/chat_screen.dart';
+import 'package:fyp/screens/home/home.dart';
 import 'package:fyp/screens/worker/all_workers.dart';
 import 'package:fyp/screens/worker/worker_detail.dart';
 import 'package:intl/intl.dart';
@@ -34,9 +35,9 @@ class OfferListItem extends StatelessWidget {
               color: Colors.lightBlue[50],
             ),
             padding: const EdgeInsets.only(
-              left: 11,
-              // right: 153,
-            ),
+                // left: 11,
+                // right: 153,
+                ),
             child: Image.network(
               image,
               fit: BoxFit.fitWidth,
@@ -169,6 +170,7 @@ class CategoryPageListItem extends StatelessWidget {
       },
       child: Ink(
         child: Container(
+          height: 180,
           width: SizeConfig.screenWidth / 2.3,
           margin: const EdgeInsets.all(4.0),
           decoration: BoxDecoration(
@@ -301,8 +303,9 @@ class ServiceWorkerTile extends StatelessWidget {
                       height: 48,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        image:
-                            DecorationImage(image: NetworkImage(obj['image'])),
+                        image: DecorationImage(
+                            image: NetworkImage(obj['image']),
+                            fit: BoxFit.cover),
                         boxShadow: const [
                           BoxShadow(
                             color: Color(0x14000000),
@@ -617,19 +620,25 @@ class BookingModal extends StatelessWidget {
           ),
           InkWell(
             onTap: (() async {
-              User _user = FirebaseAuth.instance.currentUser;
+              if (_pickedServices.value.isEmpty) {
+                NavigatorService().pop(context);
+                NavigatorService().showSnackbar(
+                    context, "Please select at least one service");
+              } else {
+                User _user = FirebaseAuth.instance.currentUser;
 
-              await FirebaseFirestore.instance.collection('Bookings').add({
-                'time': Timestamp.fromDate(_pickedTime.value),
-                'worker_id': obj['worker_id'],
-                'worker_name': obj['name'],
-                'services': _pickedServices.value,
-                'owner_id': _user.uid,
-                'worker_image': obj['image']
-              });
-              NavigatorService()
-                  .showSnackbar(context, "Successfully booked service!");
-              NavigatorService().pop(context);
+                await FirebaseFirestore.instance.collection('Bookings').add({
+                  'time': Timestamp.fromDate(_pickedTime.value),
+                  'worker_id': obj['worker_id'],
+                  'worker_name': obj['name'],
+                  'services': _pickedServices.value,
+                  'owner_id': _user.uid,
+                  'worker_image': obj['image']
+                });
+                NavigatorService()
+                    .showSnackbar(context, "Successfully booked service!");
+                NavigatorService().clearNavigate(context, const HomePage(initIndex: 3,));
+              }
             }),
             child: Container(
               width: double.infinity,
@@ -742,11 +751,13 @@ class HistoryWidget extends StatelessWidget {
           const SizedBox(height: 16),
           InkWell(
             onTap: () {
-              NavigatorService().navigate(context, ChatScreen(
-                workerId: obj['worker_id'],
-                workerImage: obj['worker_image'],
-                workerName: obj['worker_name'],
-              ));
+              NavigatorService().navigate(
+                  context,
+                  ChatScreen(
+                    workerId: obj['worker_id'],
+                    workerImage: obj['worker_image'],
+                    workerName: obj['worker_name'],
+                  ));
             },
             child: Container(
               width: 120,
@@ -780,7 +791,6 @@ class AllChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        print(obj);
         NavigatorService().navigate(
             context,
             ChatScreen(

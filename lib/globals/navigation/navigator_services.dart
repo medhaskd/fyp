@@ -15,7 +15,7 @@ class NavigatorService {
 
   Future<Object> clearNavigate(BuildContext ctx, Widget page) {
     return Navigator.of(ctx)
-        .pushAndRemoveUntil(FadeRoute(page: page), (route) => route.isFirst);
+        .pushAndRemoveUntil(FadeRoute(page: page), (route) => false);
   }
 
   void showSnackbar(BuildContext ctx, String msg) {

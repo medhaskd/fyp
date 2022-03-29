@@ -36,11 +36,13 @@ String categoryimagePath(String s) => 'assets/images/$s.png';
 // ];
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key key, this.initIndex = 0}) : super(key: key);
+
+  final int initIndex;
 
   @override
   Widget build(BuildContext context) {
-    final PageController _pageController = PageController(initialPage: 0);
+    final PageController _pageController = PageController(initialPage: initIndex);
 
     final List<Widget> _pages = [
       HomeBase(),
@@ -50,7 +52,7 @@ class HomePage extends StatelessWidget {
       Center(child: Text("PROFILE"))
     ];
 
-    ValueNotifier<int> _curIndex = ValueNotifier<int>(0);
+    ValueNotifier<int> _curIndex = ValueNotifier<int>(initIndex);
 
     return SafeArea(
       child: Scaffold(
