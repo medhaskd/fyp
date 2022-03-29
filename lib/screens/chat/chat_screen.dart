@@ -152,6 +152,7 @@ class ChatScreen extends StatelessWidget {
                                 .collection('Chats')
                                 .doc(docId)
                                 .update({
+                              'unread': 0,
                               'chats': FieldValue.arrayUnion([
                                 {
                                   'created_at': Timestamp.now(),

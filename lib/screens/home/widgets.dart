@@ -742,7 +742,11 @@ class HistoryWidget extends StatelessWidget {
           const SizedBox(height: 16),
           InkWell(
             onTap: () {
-              NavigatorService().navigate(context, ChatScreen());
+              NavigatorService().navigate(context, ChatScreen(
+                workerId: obj['worker_id'],
+                workerImage: obj['worker_image'],
+                workerName: obj['worker_name'],
+              ));
             },
             child: Container(
               width: 120,
