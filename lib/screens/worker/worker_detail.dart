@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fyp/globals/designs/size_config.dart';
 import 'package:fyp/screens/home/widgets.dart';
 
 class WorkerDetail extends StatelessWidget {

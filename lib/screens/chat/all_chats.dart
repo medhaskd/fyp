@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../home/widgets.dart';
 
-class AllWorkers extends StatelessWidget {
-  AllWorkers({Key key, this.service = ""}) : super(key: key);
+class AllChats extends StatelessWidget {
+  AllChats({Key key, this.service = ""}) : super(key: key);
 
   final String service;
 
@@ -68,8 +69,9 @@ class AllWorkers extends StatelessWidget {
             ),
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: FirebaseFirestore.instance
-                    .collection('Workers')
-                    .where('services', arrayContains: service.toLowerCase())
+                    .collection('Chats')
+                    .where('user_id',
+                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -90,7 +92,7 @@ class AllWorkers extends StatelessWidget {
                           List<Map<String, dynamic>> _categories =
                               text.isNotEmpty
                                   ? categories
-                                      .where((element) => element['name']
+                                      .where((element) => element['worker_name']
                                           .toString()
                                           .toLowerCase()
                                           .contains(text.toLowerCase()))
@@ -98,14 +100,14 @@ class AllWorkers extends StatelessWidget {
                                   : categories;
                           if (_categories.isEmpty) {
                             return const Center(
-                                child: Text("No service worker found"));
+                                child: Text("No chats found"));
                           }
                           return ListView.builder(
-                            itemCount: _categories.length,
-                            itemBuilder: (ctx, i) => ServiceWorkerTile(
-                              obj: _categories[i],
-                            ),
-                          );
+                            padding: const EdgeInsets.all(12.0),
+                              itemCount: _categories.length,
+                              itemBuilder: (ctx, i) => AllChatListItem(
+                                    obj: _categories[i],
+                                  ));
                         }),
                   );
                 }),

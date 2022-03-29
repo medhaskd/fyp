@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fyp/screens/cart/cart.dart';
+import 'package:fyp/screens/chat/all_chats.dart';
 import 'package:fyp/screens/home/categories.dart';
 import 'package:fyp/screens/home/home_base.dart';
 
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
     final List<Widget> _pages = [
       HomeBase(),
       CategoriesPage(),
-      CategoriesPage(),
+      AllChats(),
       CartScreen(),
       Center(child: Text("PROFILE"))
     ];

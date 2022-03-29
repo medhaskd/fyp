@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
+import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fyp/globals/designs/size_config.dart';
 import 'package:fyp/globals/navigation/navigator_services.dart';
+import 'package:fyp/screens/chat/chat_screen.dart';
 import 'package:fyp/screens/worker/all_workers.dart';
 import 'package:fyp/screens/worker/worker_detail.dart';
 import 'package:intl/intl.dart';
@@ -623,6 +625,7 @@ class BookingModal extends StatelessWidget {
                 'worker_name': obj['name'],
                 'services': _pickedServices.value,
                 'owner_id': _user.uid,
+                'worker_image': obj['image']
               });
               NavigatorService()
                   .showSnackbar(context, "Successfully booked service!");
@@ -726,8 +729,7 @@ class HistoryWidget extends StatelessWidget {
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
-                  DateFormat()
-                      .format((obj['time'] as Timestamp).toDate()),
+                  DateFormat().format((obj['time'] as Timestamp).toDate()),
                   textAlign: TextAlign.justify,
                   style: const TextStyle(
                     color: Color(0xff595959),
@@ -738,26 +740,119 @@ class HistoryWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Container(
-            width: 120,
-            height: 32,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: const Color(0xff003156),
-            ),
-            padding: const EdgeInsets.all(8),
-            child: const Text(
-              "Send a message",
-              textAlign: TextAlign.justify,
-              style:  TextStyle(
-                color: Colors.white,
-                fontSize: 14,
+          InkWell(
+            onTap: () {
+              NavigatorService().navigate(context, ChatScreen());
+            },
+            child: Container(
+              width: 120,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: const Color(0xff003156),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: const Text(
+                "Send a message",
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
           const SizedBox(height: 16),
         ],
       ),
+    );
+  }
+}
+
+class AllChatListItem extends StatelessWidget {
+  const AllChatListItem({Key key, this.obj}) : super(key: key);
+  final Map<String, dynamic> obj;
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        print(obj);
+        NavigatorService().navigate(
+            context,
+            ChatScreen(
+              workerId: obj['worker_id'],
+              workerImage: obj['worker_image'],
+              workerName: obj['worker_name'],
+            ));
+      },
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(image: NetworkImage(obj['worker_image'])),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 9,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+      ),
+      title: Text(
+        obj['worker_name'],
+        textAlign: TextAlign.justify,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontFamily: "Roboto",
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Row(
+        children: [
+          if (obj['chats'].last['sender'] == 'user')
+            Icon(
+              Icons.done_all_outlined,
+              color: obj['unread'] == 0 ? Colors.blue : Colors.black45,
+            ),
+          Text(obj['chats'].last['text']),
+        ],
+      ),
+      trailing: Text(DateFormat('hh:mm')
+          .format((obj['chats'].last['created_at'] as Timestamp).toDate())),
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  const ChatBubble({Key key, this.obj}) : super(key: key);
+  final Map<String, dynamic> obj;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: obj['sender'] == 'user'
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Bubble(
+            nip: obj['sender'] == 'user'
+                ? BubbleNip.rightTop
+                : BubbleNip.leftTop,
+            color: obj['sender'] == 'user'
+                ? const Color.fromRGBO(225, 255, 199, 1.0)
+                : const Color.fromARGB(255, 15, 227, 255),
+            child: Text(obj['text'],
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18.0)),
+          ),
+        ),
+      ],
     );
   }
 }
