@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:fyp/screens/cart/cart.dart';
 import 'package:fyp/screens/home/categories.dart';
 import 'package:fyp/screens/home/home_base.dart';
 
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
       HomeBase(),
       CategoriesPage(),
       CategoriesPage(),
-      HomeBase(),
+      CartScreen(),
       Center(child: Text("PROFILE"))
     ];
 

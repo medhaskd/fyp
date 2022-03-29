@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fyp/globals/designs/size_config.dart';
 import 'package:fyp/globals/navigation/navigator_services.dart';
-import 'package:fyp/providers/auth_provider.dart';
 import 'package:fyp/screens/worker/all_workers.dart';
 import 'package:fyp/screens/worker/worker_detail.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class OfferListItem extends StatelessWidget {
   const OfferListItem({Key key, this.title, this.image}) : super(key: key);
@@ -617,11 +616,6 @@ class BookingModal extends StatelessWidget {
           InkWell(
             onTap: (() async {
               User _user = FirebaseAuth.instance.currentUser;
-              // String _services = "";
-              // for (var element in _pickedServices.value) {
-              //   _services += (element.toString() + ", ");
-              // }
-              // _services = _services.substring(0, _services.length - 2);
 
               await FirebaseFirestore.instance.collection('Bookings').add({
                 'time': Timestamp.fromDate(_pickedTime.value),
@@ -663,6 +657,105 @@ class BookingModal extends StatelessWidget {
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class HistoryWidget extends StatelessWidget {
+  const HistoryWidget({Key key, this.obj}) : super(key: key);
+
+  final Map<String, dynamic> obj;
+
+  @override
+  Widget build(BuildContext context) {
+    String _services = "";
+    for (var element in obj['services']) {
+      _services += (element.toString() + ", ");
+    }
+    _services = _services.substring(0, _services.length - 2);
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color(0xfff1f1f1),
+          width: 1,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0c000000),
+            blurRadius: 14,
+            offset: Offset(0, 4),
+          ),
+        ],
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 42,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16),
+          Text(
+            _services + " with " + obj['worker_name'],
+            textAlign: TextAlign.justify,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.event,
+                  color: Colors.black45,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  DateFormat()
+                      .format((obj['time'] as Timestamp).toDate()),
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(
+                    color: Color(0xff595959),
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: 120,
+            height: 32,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xff003156),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const Text(
+              "Send a message",
+              textAlign: TextAlign.justify,
+              style:  TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
