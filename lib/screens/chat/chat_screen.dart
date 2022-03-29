@@ -74,8 +74,8 @@ class ChatScreen extends StatelessWidget {
                     .where('worker_id', isEqualTo: workerId)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  print(
-                      FirebaseAuth.instance.currentUser.uid + " : " + workerId);
+                  // print(
+                  //     FirebaseAuth.instance.currentUser.uid + " : " + workerId);
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const SizedBox(
                         height: 20,
